@@ -68,13 +68,12 @@ Student_Details.sort(key=lambda student: student["Percentage"], reverse=True)
 previous_percentage = None
 rank = 0
 
-for position, student in enumerate(Student_Details, start=1):
-
+for student in Student_Details:
     percentage = student["Percentage"]
 
-    if percentage != previous_percentage:
-        rank = position
+    if previous_percentage is None or percentage < previous_percentage:
+        rank += 1
 
-    print(rank, student["Name"],percentage)
+    print(rank, student["Name"], percentage)
 
     previous_percentage = percentage
