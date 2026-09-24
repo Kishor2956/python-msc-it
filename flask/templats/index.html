@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header class="app-header">
+    <div class="header-title">
+        <h1>📝 My To-Do List</h1>
+        <p class="subtitle">Organize your daily tasks with Flask & SQLite</p>
+    </div>
+
+    <!-- Task Statistics -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-number">{{ total }}</span>
+            <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-card stat-pending">
+            <span class="stat-number">{{ pending }}</span>
+            <span class="stat-label">Pending</span>
+        </div>
+        <div class="stat-card stat-completed">
+            <span class="stat-number">{{ completed }}</span>
+            <span class="stat-label">Completed</span>
+        </div>
+    </div>
+</header>
+
+<!-- Add Task Form (CREATE) -->
+<section class="card form-card">
+    <h2>Add New Task</h2>
+    <form action="{{ url_for('add') }}" method="POST" class="todo-form">
+        <div class="form-group">
+            <input 
+                type="text" 
+                name="title" 
+                placeholder="What needs to be done? *" 
+                required 
+                autocomplete="off"
+                class="form-control"
+            >
+        </div>
+        <div class="form-group">
+            <textarea 
+                name="description" 
+                placeholder="Add optional notes or details..." 
+                rows="2" 
+                class="form-control"
+            ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">➕ Add Task</button>
+    </form>
+</section>
+
+<!-- Task List (READ, UPDATE, DELETE) -->
+<section class="todo-list-section">
+    <h2>Tasks ({{ total }})</h2>
+
+    {% if todos %}
+        <div class="todo-list">
+            {% for todo in todos %}
+                <div class="todo-item {% if todo.completed %}is-completed{% endif %}">
+                    <div class="todo-status-col">
+                        <a href="{{ url_for('toggle', id=todo.id) }}" class="toggle-checkbox" title="Toggle Status">
+                            {% if todo.completed %}
+                                <span class="check-icon">✓</span>
+                            {% else %}
+                                <span class="uncheck-icon"></span>
+                            {% endif %}
+                        </a>
+                    </div>
+                    
+                    <div class="todo-content">
+                        <div class="todo-title-row">
+                            <h3 class="todo-title">{{ todo.title }}</h3>
+                            <span class="badge {% if todo.completed %}badge-completed{% else %}badge-pending{% endif %}">
+                                {% if todo.completed %}Completed{% else %}Pending{% endif %}
+                            </span>
+                        </div>
+                        {% if todo.description %}
+                            <p class="todo-desc">{{ todo.description }}</p>
+                        {% endif %}
+                        <div class="todo-meta">
+                            <small>Created on: {{ todo.created_at }}</small>
+                        </div>
+                    </div>
+
+                    <div class="todo-actions">
+                        <a href="{{ url_for('toggle', id=todo.id) }}" class="btn btn-sm btn-outline" title="Toggle Complete">
+                            {% if todo.completed %}↩ Pending{% else %}✓ Done{% endif %}
+                        </a>
+                        <a href="{{ url_for('edit', id=todo.id) }}" class="btn btn-sm btn-secondary" title="Edit Task">
+                            ✏️ Edit
+                        </a>
+                        <a href="{{ url_for('delete', id=todo.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this task?');" title="Delete Task">
+                            🗑️ Delete
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state card">
+            <div class="empty-icon">🎉</div>
+            <h3>No tasks yet!</h3>
+            <p>Add your first task above to get started.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
