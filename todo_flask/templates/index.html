@@ -8,6 +8,182 @@
 
 <h2>Todo App</h2>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #202938;
+        }
+        header {
+            background: #3448c5;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        main { max-width: 1000px; margin: 25px auto; padding: 0 16px; }
+        .panel, .task {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 3px 12px #17255410;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d5d9e2;
+            border-radius: 7px;
+            font: inherit;
+        }
+        textarea { resize: vertical; }
+        button, .btn {
+            display: inline-block;
+            border: 0;
+            border-radius: 7px;
+            padding: 10px 14px;
+            background: #3448c5;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .add-button { margin-top: 12px; }
+        .delete { background: #dc3545; }
+        .complete { background: #198754; }
+        .edit { background: #64748b; }
+        .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .actions form { margin: 0; }
+        .priority { font-weight: bold; }
+        .High { color: #dc3545; }
+        .Medium { color: #d97706; }
+        .Low { color: #198754; }
+        .message { padding: 12px; border-radius: 7px; margin-bottom: 12px; }
+        .success { background: #d1fae5; }
+        .error { background: #fee2e2; }
+        .muted { color: #6b7280; }
+        .done h3 { text-decoration: line-through; color: #6b7280; }
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>My To-Do List</h1>
+    <p>task-8 My To-Do List </p>
+</header>
+
+<main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="message {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <section class="panel">
+        <h2>+ Add a New Task</h2>
+        <form action="{{ url_for('add') }}" method="POST">
+            <div class="form-grid">
+                <input name="title" maxlength="150"
+                       placeholder="Task title" required>
+                <select name="priority" required>
+                    <option value="High">High Priority</option>
+                    <option value="Medium" selected>Medium Priority</option>
+                    <option value="Low">Low Priority</option>
+                </select>
+                <textarea name="description" maxlength="300"
+                          placeholder="Description (optional)" rows="3"></textarea>
+                <div>
+                    <label for="due_date">Due date</label>
+                    <input type="date" id="due_date" name="due_date">
+                </div>
+            </div>
+            <button class="add-button" type="submit">Add Task</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Pending Tasks ({{ pending_tasks|length }})</h2>
+        {% for task in pending_tasks %}
+            <article class="task">
+                <h3>{{ task.title }}</h3>
+                <p>{{ task.description or "No description provided." }}</p>
+                <p>
+                    Priority:
+                    <span class="priority {{ task.priority }}">
+                        {{ task.priority }}
+                    </span>
+                </p>
+                <p class="muted">
+                    Due date: {{ task.due_date or "Not set" }}
+                </p>
+                <div class="actions">
+                    <a class="btn complete"
+                       href="{{ url_for('toggle', id=task.id) }}">
+                        ✓ Mark Completed
+                    </a>
+                    <a class="btn edit"
+                       href="{{ url_for('edit', id=task.id) }}">Edit</a>
+                    <form action="{{ url_for('delete', id=task.id) }}"
+                          method="POST"
+                          onsubmit="return confirm('Delete this task?');">
+                        <button class="delete" type="submit">Delete</button>
+                    </form>
+                </div>
+            </article>
+        {% else %}
+            <p class="muted">No pending tasks. You're all caught up!</p>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h2>Completed Tasks ({{ completed_tasks|length }})</h2>
+        {% for task in completed_tasks %}
+            <article class="task done">
+                <h3>{{ task.title }}</h3>
+                <p>{{ task.description or "No description provided." }}</p>
+                <p>
+                    Priority:
+                    <span class="priority {{ task.priority }}">
+                        {{ task.priority }}
+                    </span>
+                </p>
+                <p class="muted">
+                    Due date: {{ task.due_date or "Not set" }}
+                </p>
+                <div class="actions">
+                    <a class="btn" href="{{ url_for('toggle', id=task.id) }}">
+                        ↩ Mark Pending
+                    </a>
+                    <a class="btn edit"
+                       href="{{ url_for('edit', id=task.id) }}">Edit</a>
+                    <form action="{{ url_for('delete', id=task.id) }}"
+                          method="POST"
+                          onsubmit="return confirm('Delete this task?');">
+                        <button class="delete" type="submit">Delete</button>
+                    </form>
+                </div>
+            </article>
+        {% else %}
+            <p class="muted">No completed tasks yet.</p>
+        {% endfor %}
+    </section>
+</main>
+</body>
+</html>
 <form action="/home" method="post">
 
     <label>Name:</label>
