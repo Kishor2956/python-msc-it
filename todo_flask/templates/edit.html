@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            margin: 0;
+            padding: 25px 15px;
+            color: #202938;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 18px;
+            border: 1px solid #d5d9e2;
+            border-radius: 7px;
+            box-sizing: border-box;
+            font: inherit;
+        }
+        button, a {
+            display: inline-block;
+            padding: 11px 16px;
+            border: none;
+            border-radius: 7px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button { background: #3448c5; color: white; }
+        a { background: #64748b; color: white; }
+        .error { background: #fee2e2; padding: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Edit Task</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <p class="{{ category }}">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <form action="{{ url_for('update', id=task.id) }}" method="POST">
+        <label for="title">Task Title</label>
+        <input id="title" name="title" maxlength="150"
+               value="{{ task.title }}" required>
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description"
+                  maxlength="300" rows="4">{{ task.description or "" }}</textarea>
+
+        <label for="priority">Priority</label>
+        <select id="priority" name="priority" required>
+            <option value="High"
+                {% if task.priority == "High" %}selected{% endif %}>
+                High
+            </option>
+            <option value="Medium"
+                {% if task.priority == "Medium" %}selected{% endif %}>
+                Medium
+            </option>
+            <option value="Low"
+                {% if task.priority == "Low" %}selected{% endif %}>
+                Low
+            </option>
+        </select>
+
+        <label for="due_date">Due Date</label>
+        <input id="due_date" type="date" name="due_date"
+               value="{{ task.due_date.isoformat() if task.due_date else '' }}">
+
+        <button type="submit">Save Changes</button>
+        <a href="{{ url_for('index') }}">Cancel</a>
+    </form>
+</div>
+</body>
+</html>
