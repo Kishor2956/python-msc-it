@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo App</title>
+</head>
+
+<body>
+
+<h2>Todo App</h2>
+
+<form action="/home" method="post">
+
+    <label>Name:</label>
+    <input type="text" name="todo-name" required>
+
+    <br><br>
+
+    <label>Date:</label>
+    <input type="date" name="todo-date" required>
+
+    <br><br>
+
+    <label>Status:</label>
+
+    <select name="todo-status">
+        <option value="progress">Progress</option>
+        <option value="active">Active</option>
+        <option value="complete">Complete</option>
+    </select>
+
+    <br><br>
+
+    <button type="submit">Submit</button>
+
+</form>
+
+</body>
+</html>
