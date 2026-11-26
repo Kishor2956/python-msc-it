@@ -1,0 +1,14 @@
+
+{% extends "base.html" %}
+{% block title %}Task Details{% endblock %}
+{% block content %}
+<div class="card">
+<h1>{{ task.title }}</h1>
+<p>{{ task.description or "No description" }}</p>
+<p><strong>Priority:</strong> {{ task.priority or "Medium" }}</p>
+<p><strong>Due date:</strong> {{ task.due_date or "Not set" }}</p>
+<p><strong>Status:</strong> {{ "Completed" if task.is_completed else "Pending" }}</p>
+<a class="btn" href="/tasks/{{ task.id }}/edit">Edit Task</a>
+<a class="btn" href="/dashboard">Back to Dashboard</a>
+</div>
+{% endblock %}

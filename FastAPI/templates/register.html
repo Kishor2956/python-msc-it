@@ -1,0 +1,19 @@
+
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="card" style="max-width:500px;margin:auto">
+<h1>Create Account</h1>
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+<form action="/register" method="post">
+<label>Name</label>
+<input name="name" maxlength="100" required>
+<label>Email</label>
+<input name="email" type="email" maxlength="100" required>
+<label>Password (minimum 8 characters)</label>
+<input name="password" type="password" minlength="8" required>
+<button type="submit">Register</button>
+</form>
+<p>Already registered? <a href="/login">Login here</a></p>
+</div>
+{% endblock %}

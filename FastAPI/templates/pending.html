@@ -1,0 +1,24 @@
+
+{% extends "base.html" %}
+{% block title %}Pending Tasks{% endblock %}
+{% block content %}
+<div class="card">
+<h1>Pending Tasks</h1>
+<a class="btn" href="/dashboard">All Tasks</a>
+<a class="btn" href="/tasks/completed">Completed Tasks</a>
+{% for task in tasks %}
+<div class="task">
+<h3>{{ task.title }}</h3>
+<p>{{ task.description or "No description" }}</p>
+<p>Priority: {{ task.priority or "Medium" }}</p>
+<p>Due date: {{ task.due_date or "Not set" }}</p>
+<form class="inline" action="/tasks/{{ task.id }}/toggle" method="post">
+<button class="success">Mark Completed</button>
+</form>
+<a class="btn" href="/tasks/{{ task.id }}/edit">Edit</a>
+</div>
+{% else %}
+<p>No pending tasks.</p>
+{% endfor %}
+</div>
+{% endblock %}

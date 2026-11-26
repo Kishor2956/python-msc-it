@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Todo Manager{% endblock %}</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#1e293b}
+nav{background:#1e3a8a;color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+nav a{color:white;text-decoration:none;margin-right:12px}
+.container{max-width:1000px;margin:30px auto;padding:0 16px}
+.card{background:white;padding:22px;border-radius:12px;margin-bottom:20px;box-shadow:0 3px 12px #0000000d}
+input,textarea,select{display:block;width:100%;padding:11px;margin:7px 0 15px;border:1px solid #cbd5e1;border-radius:7px;font:inherit}
+button,.btn{display:inline-block;padding:10px 15px;background:#2563eb;color:white;border:0;border-radius:7px;text-decoration:none;cursor:pointer}
+.danger{background:#dc2626}.success{background:#15803d}
+.muted{color:#64748b}.error{color:#991b1b;background:#fee2e2;padding:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.task{padding:15px 0;border-bottom:1px solid #e2e8f0}
+.inline{display:inline-block}.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.filters a{background:#e2e8f0;padding:10px;border-radius:6px;text-decoration:none;color:#1e293b}
+@media(max-width:600px){.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+<strong>✓ Todo Manager</strong>
+<div>
+{% if request.session.get("user_id") %}
+<a href="/dashboard">Dashboard</a>
+<a href="/profile">Profile</a>
+<a href="/tasks/add">Add Task</a>
+<a href="/tasks/pending">Pending</a>
+<a href="/tasks/completed">Completed</a>
+<form action="/logout" method="post" class="inline">
+<button type="submit">Logout</button>
+</form>
+{% else %}
+<a href="/">Home</a>
+<a href="/register">Register</a>
+<a href="/login">Login</a>
+{% endif %}
+</div>
+</nav>
+<main class="container">
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>

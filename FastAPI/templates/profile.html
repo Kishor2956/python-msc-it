@@ -1,0 +1,18 @@
+
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<div class="card" style="max-width:600px;margin:auto">
+<h1>My Profile</h1>
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+<p><strong>User ID:</strong> {{ user.id }}</p>
+<form action="/profile" method="post">
+<label>Name</label>
+<input name="name" value="{{ user.name }}" maxlength="100" required>
+<label>Email</label>
+<input name="email" type="email" value="{{ user.email }}" maxlength="100" required>
+<button type="submit">Update Profile</button>
+</form>
+<a class="btn" href="/dashboard">Back to Dashboard</a>
+</div>
+{% endblock %}

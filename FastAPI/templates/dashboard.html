@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Hello, {{ user.name }}!</h1>
+<p class="muted">Welcome to your personal task dashboard.</p>
+<div class="stats">
+<div class="card"><p>All Tasks</p><h2>{{ total }}</h2></div>
+<div class="card"><p>Pending Tasks</p><h2>{{ pending }}</h2></div>
+<div class="card"><p>Completed Tasks</p><h2>{{ completed }}</h2></div>
+</div>
+<div class="card">
+<a class="btn" href="/tasks/add">+ Add New Task</a>
+</div>
+<div class="card">
+<div class="filters">
+<a href="/dashboard">All Tasks</a>
+<a href="/tasks/pending">Pending</a>
+<a href="/tasks/completed">Completed</a>
+</div>
+{% for task in tasks %}
+<div class="task">
+<h3>{% if task.is_completed %}<del>{{ task.title }}</del>{% else %}{{ task.title }}{% endif %}</h3>
+<p>{{ task.description or "No description" }}</p>
+<p class="muted">Priority: {{ task.priority or "Medium" }} | Due: {{ task.due_date or "Not set" }}</p>
+<p>Status: {{ "Completed" if task.is_completed else "Pending" }}</p>
+<a class="btn" href="/tasks/{{ task.id }}/edit">Edit</a>
+<a class="btn" href="/tasks/{{ task.id }}">Details</a>
+<form class="inline" action="/tasks/{{ task.id }}/toggle" method="post">
+<button class="success">{{ "Mark Pending" if task.is_completed else "Complete" }}</button>
+</form>
+<form class="inline" action="/tasks/{{ task.id }}/delete" method="post" onsubmit="return confirm('Delete this task?')">
+<button class="danger">Delete</button>
+</form>
+</div>
+{% else %}
+<p>No tasks available. Add your first task!</p>
+{% endfor %}
+</div>
+{% endblock %}
